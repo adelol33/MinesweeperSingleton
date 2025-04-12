@@ -1,0 +1,11 @@
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="backgroundColor">#F5F5F5</color>
+    <color name="cellRevealed">#E0E0E0</color>
+    <color name="cellUnrevealed">#BDBDBD</color>
+    <color name="cellFlagged">#FF9800</color>
+    <color name="textColorPrimary">#212121</color>
+    <color name="textColorSecondary">#757575</color>
+</resources>

@@ -29,6 +29,9 @@ class ScoreAdapter(private val scores: List<Score>) :
         holder.nameTextView.text = score.getName()
         holder.timeTextView.text = formatDuration(score.getTime())
         holder.difficultyTextView.text = score.getDifficulty().name
+        val rankTextView = holder.itemView.findViewById<TextView>(R.id.playerRank)
+        rankTextView.text = (position + 1).toString()
+
     }
 
     override fun getItemCount() = scores.size

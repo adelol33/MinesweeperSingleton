@@ -105,4 +105,18 @@ class Board(private val difficulty: Difficulty) {
     fun executeBombBehavior(x: Int, y: Int): String? {
         return cells[y][x].executeBombBehavior()
     }
+
+    fun getCell(x: Int, y: Int): Cell {
+        return cells[y][x]
+    }
+
+    fun revealAllCells() {
+        for (y in 0 until GameConfig.NUMBER_OF_ROWS) {
+            for (x in 0 until GameConfig.NUMBER_OF_COLUMNS) {
+                val cell = getCell(x, y)
+                cell.reveal()
+
+            }
+        }
+    }
 }

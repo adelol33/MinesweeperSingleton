@@ -58,6 +58,10 @@ class Game(private val difficulty: Difficulty) {
         // Si la cellule est une bombe, on perd
         if (board.isBomb(x, y)) {
             updateTime()
+            // Révéler la bombe cliquée
+            board.reveal(x, y)
+            // Révéler toutes les autres cellules
+            board.revealAllCells()
             val message = board.executeBombBehavior(x, y) ?: "Vous avez perdu!"
             notifyGameLost(message)
             return GameResult(false, playingTime)
@@ -75,6 +79,7 @@ class Game(private val difficulty: Difficulty) {
 
         return null
     }
+
 
     fun flagCell(x: Int, y: Int) {
         board.flag(x, y)

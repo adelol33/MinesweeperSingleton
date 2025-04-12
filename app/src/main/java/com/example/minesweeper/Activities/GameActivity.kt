@@ -109,6 +109,10 @@ class GameActivity : AppCompatActivity(), GameObserver {
                 startActivity(intent)
             }
             .setNegativeButton("Menu principal") { _, _ ->
+                // Créer un intent pour MainActivity et effacer la pile d'activités
+                val intent = android.content.Intent(this, MainActivity::class.java)
+                intent.flags = android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP or android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
                 finish()
             }
             .setCancelable(false)
@@ -140,5 +144,7 @@ class GameActivity : AppCompatActivity(), GameObserver {
 
     override fun onGameLost(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        isGameOver = true
+        cellAdapter.notifyDataSetChanged() // Cette ligne est importante!
     }
 }

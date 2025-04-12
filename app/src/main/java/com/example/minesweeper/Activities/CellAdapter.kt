@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.ImageView
 import android.widget.TextView
 import com.example.minesweeper.R
 import com.example.minesweeper.game.Board
@@ -34,28 +35,53 @@ class CellAdapter(private val context: Context, private val board: Board) : Base
         val x = position % GameConfig.NUMBER_OF_COLUMNS
         val y = position / GameConfig.NUMBER_OF_COLUMNS
 
-        when (val cellState = board.getCellState(x, y)) {
+        // Récupérer la cellule du tableau
+        val cell = board.getCell(x, y)
+        val cellState = board.getCellState(x, y)
+
+        when (cellState) {
             is CellState.Hidden -> {
                 cellText.text = ""
+                cellText.visibility = View.VISIBLE
                 view.setBackgroundResource(R.drawable.cell_background)
             }
             is CellState.Flagged -> {
                 cellText.text = "🚩"
+                cellText.visibility = View.VISIBLE
                 view.setBackgroundResource(R.drawable.cell_background)
             }
+            // Dans la section CellState.Revealed de CellAdapter.kt
             is CellState.Revealed -> {
-                when (cellState.bombCount) {
-                    0 -> {
-                        cellText.text = ""
-                        cellText.setBackgroundColor(context.getColor(android.R.color.white))
+                // Vérifier si c'est une bombe
+                if (cell.isBomb()) {
+                    // Afficher l'image appropriée selon le type de bombe
+                    cellText.visibility = View.INVISIBLE // Cacher le texte
+
+                    // Déterminer quelle image afficher
+                    val bombSymbol = cell.getBombSymbol()
+                    if (bombSymbol == "💣") { // ClassicBomb
+                        view.setBackgroundResource(R.drawable.bomb)
+                    } else if (bombSymbol == "👾") { // ExplosionBomb (alien)
+                        view.setBackgroundResource(R.drawable.alien)
                     }
-                    else -> {
-                        cellText.text = cellState.bombCount.toString()
-                        cellText.setTextColor(getNumberColor(cellState.bombCount))
-                        cellText.setBackgroundColor(context.getColor(android.R.color.white))
+                } else {
+                    // C'est un nombre ou une case vide
+                    cellText.visibility = View.VISIBLE
+                    when (cellState.bombCount) {
+                        0 -> {
+                            cellText.text = ""
+                            view.setBackgroundColor(context.getColor(android.R.color.white))
+                        }
+                        else -> {
+                            cellText.text = cellState.bombCount.toString()
+                            cellText.setTextColor(getNumberColor(cellState.bombCount))
+                            view.setBackgroundColor(context.getColor(android.R.color.white))
+                        }
                     }
                 }
             }
+
+
         }
 
         // Assurez-vous que chaque cellule est carrée

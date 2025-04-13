@@ -72,5 +72,13 @@
             android:textStyle="bold"
             android:textSize="16sp"
             android:textColor="#00897B" />
+        <TextView
+            android:id="@+id/playerDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date"
+            android:textSize="12sp"
+            android:textColor="@android:color/darker_gray"
+            android:layout_marginTop="4dp"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -16,6 +16,7 @@ import com.example.minesweeper.model.GameResult
 import java.util.*
 import kotlin.time.Duration.Companion.seconds
 import android.content.DialogInterface
+import android.content.Intent
 import android.view.LayoutInflater
 import android.widget.EditText
 import com.example.minesweeper.model.LeaderboardManager
@@ -102,8 +103,41 @@ class GameActivity : AppCompatActivity(), GameObserver {
 
         // Montrer la solution et le résultat après un court délai
         Handler(Looper.getMainLooper()).postDelayed({
-            showGameResultDialog(message, result.isVictory)
+            if (result.isVictory) {
+                showVictoryDialog(result.timePlayed)
+            } else {
+                showGameResultDialog(message, result.isVictory)
+            }
         }, 500)
+    }
+
+
+    private fun showLeaderboardOption() {
+        try {
+            AlertDialog.Builder(this)
+                .setTitle("Voir le classement?")
+                .setMessage("Voulez-vous consulter le classement?")
+                .setPositiveButton("Oui") { _, _ ->
+                    try {
+                        val intent = Intent(this, LeaderboardActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        Toast.makeText(this, "Erreur lors de l'ouverture du classement", Toast.LENGTH_SHORT).show()
+                        navigateToMainMenu()
+                    }
+                }
+                .setNegativeButton("Non") { _, _ ->
+                    navigateToMainMenu()
+                }
+                .setCancelable(false)
+                .show()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Erreur lors de l'affichage du dialogue", Toast.LENGTH_SHORT).show()
+            navigateToMainMenu()
+        }
     }
 
     private fun showGameResultDialog(message: String, isVictory: Boolean) {
@@ -177,24 +211,45 @@ class GameActivity : AppCompatActivity(), GameObserver {
             val playerName = input.text.toString()
             if (playerName.isNotBlank()) {
                 saveScore(playerName, timePlayed)
+            } else {
+                // Informer l'utilisateur que le nom est requis
+                Toast.makeText(this, "Veuillez entrer un nom", Toast.LENGTH_SHORT).show()
+                // Retour au menu principal même si pas d'enregistrement
+                navigateToMainMenu()
             }
-            finish()
         }
 
         builder.setNegativeButton("Annuler") { _, _ ->
-            finish()
+            navigateToMainMenu()
         }
 
         builder.setCancelable(false)
         builder.show()
     }
+    private fun navigateToMainMenu() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        finish()
+    }
 
     private fun saveScore(playerName: String, timePlayed: Duration) {
-        // Récupérer la difficulté actuelle du jeu
-        val difficulty = intent.getSerializableExtra("DIFFICULTY") as Difficulty
+        try {
+            // Récupérer la difficulté correctement
+            val difficultyName = intent.getStringExtra("DIFFICULTY") ?: Difficulty.EASY.name
+            val difficulty = Difficulty.valueOf(difficultyName)
 
-        // Ajouter le score au leaderboard
-        val leaderboardManager = LeaderboardManager(this)
-        leaderboardManager.addScore(playerName, timePlayed, difficulty)
+            // Ajouter le score au leaderboard
+            val leaderboardManager = LeaderboardManager(this)
+            leaderboardManager.addScore(playerName, timePlayed, difficulty)
+
+            // Proposer de voir le leaderboard
+            showLeaderboardOption()
+        } catch (e: Exception) {
+            // En cas d'erreur, log et informer l'utilisateur
+            e.printStackTrace()
+            Toast.makeText(this, "Erreur lors de l'enregistrement du score", Toast.LENGTH_SHORT).show()
+            navigateToMainMenu()
+        }
     }
 }

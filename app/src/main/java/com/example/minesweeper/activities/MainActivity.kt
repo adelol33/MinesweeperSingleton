@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, DifficultySelectActivity::class.java)
             startActivity(intent)
         }
+
         val leaderboardButton = findViewById<Button>(R.id.leaderboardButton)
         leaderboardButton.setOnClickListener {
             val intent = Intent(this, LeaderboardActivity::class.java)

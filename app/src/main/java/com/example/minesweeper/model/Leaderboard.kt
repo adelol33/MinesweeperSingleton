@@ -22,3 +22,4 @@ class LeaderBoard(private val scores: ArrayList<Score> = arrayListOf()) {
         }
     }
 }
+// pour repush puisque ça a pas update

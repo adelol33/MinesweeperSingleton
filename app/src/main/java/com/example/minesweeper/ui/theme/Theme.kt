@@ -55,4 +55,5 @@ fun MinesweeperTheme(
         typography = Typography,
         content = content
     )
+
 }

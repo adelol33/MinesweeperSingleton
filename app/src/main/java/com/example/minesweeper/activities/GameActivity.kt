@@ -13,13 +13,9 @@ import com.example.minesweeper.game.Game
 import com.example.minesweeper.interfaces.GameObserver
 import com.example.minesweeper.model.Difficulty
 import com.example.minesweeper.model.GameResult
-import java.util.*
-import kotlin.time.Duration.Companion.seconds
-import android.content.DialogInterface
 import android.content.Intent
-import android.view.LayoutInflater
 import android.widget.EditText
-import com.example.minesweeper.model.LeaderboardManager
+import com.example.minesweeper.model.Leaderboard
 import androidx.appcompat.app.AlertDialog
 import kotlin.time.Duration
 
@@ -240,14 +236,18 @@ class GameActivity : AppCompatActivity(), GameObserver {
             val difficulty = Difficulty.valueOf(difficultyName)
 
             // Ajouter le score au leaderboard
-            val leaderboardManager = LeaderboardManager(this)
+            val leaderboardManager = Leaderboard(this)
             leaderboardManager.addScore(playerName, timePlayed, difficulty)
+
+            // Log pour débogage
+            android.util.Log.d("GameActivity", "Score sauvegardé: $playerName, ${timePlayed.inWholeSeconds}s, $difficultyName")
 
             // Proposer de voir le leaderboard
             showLeaderboardOption()
         } catch (e: Exception) {
             // En cas d'erreur, log et informer l'utilisateur
             e.printStackTrace()
+            android.util.Log.e("GameActivity", "Erreur lors de l'enregistrement du score", e)
             Toast.makeText(this, "Erreur lors de l'enregistrement du score", Toast.LENGTH_SHORT).show()
             navigateToMainMenu()
         }

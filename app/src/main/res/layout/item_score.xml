@@ -1,84 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
-    android:layout_marginHorizontal="16dp"
-    card_view:cardCornerRadius="16dp"
-    card_view:cardElevation="6dp"
-    android:foreground="?attr/selectableItemBackground">
+    android:orientation="horizontal"
+    android:padding="12dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/textRank"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:gravity="center_vertical">
+        android:layout_marginEnd="8dp"
+        android:text="1."
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
-        <!-- Rang -->
-        <TextView
-            android:id="@+id/playerRank"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:gravity="center"
-            android:text="1"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"
-            android:background="@drawable/bg_circle_rank" />
+    <TextView
+        android:id="@+id/textPlayerName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Joueur"
+        android:textSize="16sp" />
 
-        <!-- Avatar -->
-        <ImageView
-            android:id="@+id/playerAvatar"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="16dp"
-            android:src="@android:drawable/sym_def_app_icon"
-            android:scaleType="centerCrop"
-            android:background="@drawable/bg_circle_avatar" />
+    <TextView
+        android:id="@+id/textTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="120s"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
-        <!-- Infos -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginStart="16dp">
-
-            <TextView
-                android:id="@+id/playerName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Nom du joueur"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/playerDifficulty"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Difficulté"
-                android:textColor="#757575"
-                android:textSize="14sp" />
-        </LinearLayout>
-
-        <!-- Temps -->
-        <TextView
-            android:id="@+id/playerTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="210s"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:textColor="#00897B" />
-        <TextView
-            android:id="@+id/playerDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Date"
-            android:textSize="12sp"
-            android:textColor="@android:color/darker_gray"
-            android:layout_marginTop="4dp"/>
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+    <TextView
+        android:id="@+id/textDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="01/01/2023"
+        android:textSize="12sp" />
+</LinearLayout>

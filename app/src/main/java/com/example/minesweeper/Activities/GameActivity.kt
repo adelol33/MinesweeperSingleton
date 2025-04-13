@@ -7,7 +7,6 @@ import android.widget.GridView
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.ToggleButton
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.minesweeper.R
 import com.example.minesweeper.game.Game
@@ -16,6 +15,13 @@ import com.example.minesweeper.model.Difficulty
 import com.example.minesweeper.model.GameResult
 import java.util.*
 import kotlin.time.Duration.Companion.seconds
+import android.content.DialogInterface
+import android.view.LayoutInflater
+import android.widget.EditText
+import com.example.minesweeper.model.LeaderboardManager
+import androidx.appcompat.app.AlertDialog
+import kotlin.time.Duration
+
 
 class GameActivity : AppCompatActivity(), GameObserver {
     private lateinit var game: Game
@@ -146,5 +152,49 @@ class GameActivity : AppCompatActivity(), GameObserver {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         isGameOver = true
         cellAdapter.notifyDataSetChanged() // Cette ligne est importante!
+    }
+
+    private fun handleGameOver(result: GameResult) {
+        if (result.isVictory) {
+            showVictoryDialog(result.timePlayed)
+        } else {
+            // Gestion de la défaite (code existant)
+            Toast.makeText(this, "Vous avez perdu !", Toast.LENGTH_SHORT).show()
+            finish()
+        }
+    }
+
+    private fun showVictoryDialog(timePlayed: Duration) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Félicitations !")
+        builder.setMessage("Vous avez gagné en ${timePlayed.inWholeSeconds} secondes !")
+
+        // Créer un EditText pour saisir le nom
+        val input = EditText(this)
+        builder.setView(input)
+
+        builder.setPositiveButton("Enregistrer") { _, _ ->
+            val playerName = input.text.toString()
+            if (playerName.isNotBlank()) {
+                saveScore(playerName, timePlayed)
+            }
+            finish()
+        }
+
+        builder.setNegativeButton("Annuler") { _, _ ->
+            finish()
+        }
+
+        builder.setCancelable(false)
+        builder.show()
+    }
+
+    private fun saveScore(playerName: String, timePlayed: Duration) {
+        // Récupérer la difficulté actuelle du jeu
+        val difficulty = intent.getSerializableExtra("DIFFICULTY") as Difficulty
+
+        // Ajouter le score au leaderboard
+        val leaderboardManager = LeaderboardManager(this)
+        leaderboardManager.addScore(playerName, timePlayed, difficulty)
     }
 }

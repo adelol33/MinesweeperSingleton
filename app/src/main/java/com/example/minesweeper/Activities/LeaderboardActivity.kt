@@ -6,20 +6,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.minesweeper.R
-import com.example.minesweeper.model.Difficulty
-import com.example.minesweeper.model.LeaderBoard
-import kotlin.time.Duration.Companion.seconds
+import com.example.minesweeper.model.LeaderboardManager
 
 class LeaderboardActivity : AppCompatActivity() {
-
-    private lateinit var leaderboard: LeaderBoard
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_leaderboard)
 
-        // Initialiser le leaderboard avec les données fictives
-        leaderboard = createFakeLeaderboard()
+        // Récupérer le leaderboard sauvegardé
+        val leaderboardManager = LeaderboardManager(this)
+        val leaderboard = leaderboardManager.getLeaderboard()
 
         // Configurer le RecyclerView
         val recyclerView = findViewById<RecyclerView>(R.id.leaderboardRecyclerView)
@@ -29,16 +26,5 @@ class LeaderboardActivity : AppCompatActivity() {
         // Configurer le bouton retour
         val backButton = findViewById<Button>(R.id.backButton)
         backButton.setOnClickListener { finish() }
-    }
-
-    private fun createFakeLeaderboard(): LeaderBoard {
-        val leaderBoard = LeaderBoard()
-        leaderBoard.add("Tiago", 217.seconds, Difficulty.HARD)
-        leaderBoard.add("Romane", 286.seconds, Difficulty.EASY)
-        leaderBoard.add("Victoria", 401.seconds, Difficulty.MEDIUM)
-        leaderBoard.add("Romain", 613.seconds, Difficulty.MEDIUM)
-        leaderBoard.add("Adel", 845.seconds, Difficulty.HARD)
-        leaderBoard.add("Laurie", 1355.seconds, Difficulty.EASY)
-        return leaderBoard
     }
 }

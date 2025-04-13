@@ -5,7 +5,11 @@ import kotlin.time.Duration
 class LeaderBoard(private val scores: ArrayList<Score> = arrayListOf()) {
 
     fun getScores(): List<Score> {
-        return scores.toList() // Retourne une copie immuable de la liste
+        return scores.toList()
+    }
+
+    fun add(score: Score) {
+        scores.add(score)
     }
 
     override fun toString(): String {
@@ -16,9 +20,5 @@ class LeaderBoard(private val scores: ArrayList<Score> = arrayListOf()) {
                 appendLine(score.toString())
             }
         }
-    }
-
-    fun add(name: String, time: Duration, difficulty: Difficulty) {
-        scores.add(Score(name, time, difficulty))
     }
 }

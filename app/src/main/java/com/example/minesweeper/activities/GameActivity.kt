@@ -17,6 +17,7 @@ import android.content.Intent
 import android.widget.EditText
 import com.example.minesweeper.model.Leaderboard
 import androidx.appcompat.app.AlertDialog
+import com.example.minesweeper.model.IRepository
 import com.example.minesweeper.model.LeaderboardRepository
 import kotlin.time.Duration
 
@@ -237,7 +238,7 @@ class GameActivity : AppCompatActivity(), GameObserver {
             val difficulty = Difficulty.valueOf(difficultyName)
 
             // Ajouter le score au leaderboard
-            val leaderboardRepository = LeaderboardRepository(this)
+            val leaderboardRepository: IRepository<Difficulty, Leaderboard> = LeaderboardRepository(this)
 
             val leaderBoard = leaderboardRepository.read(difficulty)
             leaderBoard.addScore(playerName, timePlayed, difficulty)

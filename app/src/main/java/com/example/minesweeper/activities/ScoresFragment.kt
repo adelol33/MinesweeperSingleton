@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.minesweeper.R
 import com.example.minesweeper.model.Difficulty
+import com.example.minesweeper.model.IRepository
 import com.example.minesweeper.model.Leaderboard
 import com.example.minesweeper.model.LeaderboardRepository
 import com.example.minesweeper.model.Score
@@ -66,7 +67,7 @@ class ScoresFragment : Fragment() {
     }
 
     private fun loadScores() {
-        val leaderboardRepository = LeaderboardRepository(requireContext())
+        val leaderboardRepository: IRepository<Difficulty, Leaderboard> = LeaderboardRepository(requireContext())
 
         val leaderboard = leaderboardRepository.read(difficulty)
 

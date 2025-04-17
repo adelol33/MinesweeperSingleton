@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import com.example.minesweeper.R
 import com.example.minesweeper.model.Difficulty
 import com.example.minesweeper.model.Leaderboard
+import com.example.minesweeper.model.LeaderboardRepository
 import com.example.minesweeper.model.Score
 
 class ScoresFragment : Fragment() {
@@ -65,13 +66,14 @@ class ScoresFragment : Fragment() {
     }
 
     private fun loadScores() {
-        val leaderboard = Leaderboard(requireContext())
-        val scores = leaderboard.getScores(difficulty)
+        val leaderboardRepository = LeaderboardRepository(requireContext())
 
-        scoreAdapter.updateScores(scores)
+        val leaderboard = leaderboardRepository.read(difficulty)
+
+        scoreAdapter.updateScores(leaderboard.scores)
 
         // Afficher un message si aucun score
-        if (scores.isEmpty()) {
+        if (leaderboard.scores.isEmpty()) {
             emptyView.visibility = View.VISIBLE
             listView.visibility = View.GONE
         } else {

@@ -6,8 +6,14 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlin.time.Duration
 
+interface IRepository<TKey,TEntity> {
+    fun read(key:TKey):TEntity
+    fun save(entity:TEntity) {
+        // optional body
+    }
+}
 
-class LeaderboardRepository(private val context: Context) {
+class LeaderboardRepository(private val context: Context):IRepository<Difficulty,Leaderboard> {
 
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences(
         "minesweeper_leaderboard", Context.MODE_PRIVATE
@@ -16,23 +22,23 @@ class LeaderboardRepository(private val context: Context) {
     private val gson = Gson()
 
     //Reading the leader board
-    fun read(difficulty: Difficulty): Leaderboard {
-        val json = sharedPreferences.getString(getKeyForDifficulty(difficulty), null)
-            ?: return Leaderboard(mutableListOf(), difficulty)
+    override fun read(key: Difficulty): Leaderboard {
+        val json = sharedPreferences.getString(getKeyForDifficulty(key), null)
+            ?: return Leaderboard(mutableListOf(), key)
         return try {
             val type = object : TypeToken<List<Score>>() {}.type
             val scores:List<Score> = gson.fromJson(json, type) ?: emptyList()
-            Leaderboard(scores.toMutableList(), difficulty)
+            Leaderboard(scores.toMutableList(), key)
         } catch (e: Exception) {
             e.printStackTrace()
-            Leaderboard(mutableListOf(), difficulty)
+            Leaderboard(mutableListOf(), key)
         }
     }
 
     //Saving the leaderboard
-    fun save(leaderboard: Leaderboard) {
-        val json = gson.toJson(leaderboard.scores)
-        sharedPreferences.edit().putString(getKeyForDifficulty(leaderboard.difficulty), json)
+    override fun save(entity: Leaderboard) {
+        val json = gson.toJson(entity.scores)
+        sharedPreferences.edit().putString(getKeyForDifficulty(entity.difficulty), json)
             .apply()
     }
 

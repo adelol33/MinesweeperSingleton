@@ -34,7 +34,7 @@ class LeaderboardActivity : AppCompatActivity() {
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = when (position) {
                 0 -> "Facile"
-                1 -> "Intermédiaire"
+                1 -> "Moyen"
                 2 -> "Difficile"
                 else -> "Expert"
             }

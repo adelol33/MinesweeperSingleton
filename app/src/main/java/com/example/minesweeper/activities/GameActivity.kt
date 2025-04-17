@@ -28,11 +28,13 @@ class GameActivity : AppCompatActivity(), GameObserver {
     private lateinit var cellAdapter: CellAdapter
     private lateinit var timerTextView: TextView
     private lateinit var flagToggle: ToggleButton
+    private lateinit var pausePlayToggle: ToggleButton
     private var isGameOver = false
+    private var isGamePaused = false
     private val timerHandler = Handler(Looper.getMainLooper())
     private val timerRunnable = object : Runnable {
         override fun run() {
-            if (!isGameOver) {
+            if (!isGameOver && !isGamePaused) {
                 game.updateTime()
                 updateTimerDisplay()
                 timerHandler.postDelayed(this, 1000)
@@ -56,6 +58,7 @@ class GameActivity : AppCompatActivity(), GameObserver {
         gridView = findViewById(R.id.minesweeperGrid)
         timerTextView = findViewById(R.id.timerTextView)
         flagToggle = findViewById(R.id.flagToggle)
+        pausePlayToggle = findViewById(R.id.pausePlayToggle)
 
         // Setup cell adapter
         cellAdapter = CellAdapter(this, game.getBoard())
@@ -63,15 +66,37 @@ class GameActivity : AppCompatActivity(), GameObserver {
 
         // Setup click listeners
         setupGridClickListener()
+        setupPausePlayButton()
 
         // Start game timer
         game.startTimer()
         timerHandler.post(timerRunnable)
     }
 
+    private fun setupPausePlayButton() {
+        pausePlayToggle.setOnCheckedChangeListener { _, isChecked ->
+            isGamePaused = isChecked
+            if (isGamePaused) {
+                // Jeu en pause
+                timerHandler.removeCallbacks(timerRunnable)
+                // Désactiver le clic sur la grille pendant la pause
+                gridView.isEnabled = false
+                Toast.makeText(this, "Jeu en pause", Toast.LENGTH_SHORT).show()
+            } else {
+                // Reprendre le jeu
+                if (!isGameOver) {
+                    timerHandler.post(timerRunnable)
+                    // Réactiver le clic sur la grille
+                    gridView.isEnabled = true
+                    Toast.makeText(this, "Jeu repris", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
     private fun setupGridClickListener() {
         gridView.setOnItemClickListener { _, _, position, _ ->
-            if (isGameOver) return@setOnItemClickListener
+            if (isGameOver || isGamePaused) return@setOnItemClickListener
 
             val x = position % 10
             val y = position / 10
@@ -194,6 +219,20 @@ class GameActivity : AppCompatActivity(), GameObserver {
             Toast.makeText(this, "Vous avez perdu !", Toast.LENGTH_SHORT).show()
             finish()
         }
+    }
+    override fun onPause() {
+        super.onPause()
+        // Si le jeu n'est pas encore en pause et qu'il n'est pas terminé, le mettre en pause
+        if (!isGamePaused && !isGameOver) {
+            pausePlayToggle.isChecked = true
+            isGamePaused = true
+            timerHandler.removeCallbacks(timerRunnable)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Le jeu ne reprend pas automatiquement, l'utilisateur doit appuyer sur le bouton play
     }
 
     private fun showVictoryDialog(timePlayed: Duration) {

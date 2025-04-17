@@ -23,6 +23,15 @@
             android:textSize="18sp" />
 
         <ToggleButton
+            android:id="@+id/pausePlayToggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOff="⏸️"
+            android:textOn="▶️"
+            android:checked="false"
+            android:layout_marginRight="8dp" />
+
+        <ToggleButton
             android:id="@+id/flagToggle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

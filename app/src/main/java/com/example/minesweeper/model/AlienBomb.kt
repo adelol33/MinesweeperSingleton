@@ -6,6 +6,6 @@ class AlienBomb : BombEmoji() {
     }
 
     override fun executeBombBehavior(): String {
-        return "😱 You got kidnapped by aliens!"
+        return "😱 Vous avez été kidnappé par des aliens ! "
     }
 }

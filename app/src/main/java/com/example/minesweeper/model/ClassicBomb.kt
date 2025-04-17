@@ -6,6 +6,6 @@ class ClassicBomb : BombEmoji() {
     }
 
     override fun executeBombBehavior(): String {
-        return "A bomb exploded! 💥"
+        return "💥 Une bombe a explosé !"
     }
 }

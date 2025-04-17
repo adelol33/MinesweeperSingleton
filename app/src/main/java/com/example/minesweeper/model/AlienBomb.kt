@@ -1,6 +1,6 @@
 package com.example.minesweeper.model
 
-class ExplosionBomb : BombEmoji() {
+class AlienBomb : BombEmoji() {
     override fun getSymbol(): String {
         return alienSymbol
     }

@@ -23,7 +23,7 @@ class Board(private val difficulty: Difficulty) {
                 val y = Random.nextInt(0, GameConfig.NUMBER_OF_ROWS)
                 val x = Random.nextInt(0, GameConfig.NUMBER_OF_COLUMNS)
                 if (!cells[y][x].isBomb()) {
-                    val bombType = if (Random.nextBoolean()) ClassicBomb() else ExplosionBomb()
+                    val bombType = if (Random.nextBoolean()) ClassicBomb() else AlienBomb()
                     cells[y][x].markAsBomb(bombType)
                     bombIsSet = true
                 }

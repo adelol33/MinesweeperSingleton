@@ -18,13 +18,13 @@ class Game(private val difficulty: Difficulty) {
         observers.add(observer)
     }
 
-    private fun notifyCellRevealed(x: Int, y: Int) {
-        observers.forEach { it.onCellRevealed(x, y) }
-    }
-
-    private fun notifyCellFlagged(x: Int, y: Int) {
-        observers.forEach { it.onCellFlagged(x, y) }
-    }
+//    private fun notifyCellRevealed(x: Int, y: Int) {
+//        observers.forEach { it.onCellRevealed(x, y) }
+//    }
+//
+//    private fun notifyCellFlagged(x: Int, y: Int) {
+//        observers.forEach { it.onCellFlagged(x, y) }
+//    }
 
     private fun notifyGameWon() {
         observers.forEach { it.onGameWon() }
@@ -83,7 +83,7 @@ class Game(private val difficulty: Difficulty) {
 
     fun flagCell(x: Int, y: Int) {
         board.flag(x, y)
-        notifyCellFlagged(x, y)
+        //notifyCellFlagged(x, y)
     }
 
     private fun revealCell(x: Int, y: Int) {
@@ -97,7 +97,7 @@ class Game(private val difficulty: Difficulty) {
         }
 
         board.reveal(x, y)
-        notifyCellRevealed(x, y)
+        //notifyCellRevealed(x, y)
 
         // Obtenir le nombre de bombes autour
         val numberOfBombs = board.surroundingBombs(x, y)

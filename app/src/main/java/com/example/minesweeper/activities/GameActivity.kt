@@ -192,14 +192,14 @@ class GameActivity : AppCompatActivity(), GameObserver {
         timerHandler.removeCallbacks(timerRunnable)
     }
 
-    // GameObserver implementations
-    override fun onCellRevealed(x: Int, y: Int) {
-        // Notification is handled by adapter refresh
-    }
-
-    override fun onCellFlagged(x: Int, y: Int) {
-        // Notification is handled by adapter refresh
-    }
+//    // GameObserver implementations
+//    override fun onCellRevealed(x: Int, y: Int) {
+//        // Notification is handled by adapter refresh
+//    }
+//
+//    override fun onCellFlagged(x: Int, y: Int) {
+//        // Notification is handled by adapter refresh
+//    }
 
     override fun onGameWon() {
         Toast.makeText(this, "✅ Vous avez gagné!", Toast.LENGTH_SHORT).show()

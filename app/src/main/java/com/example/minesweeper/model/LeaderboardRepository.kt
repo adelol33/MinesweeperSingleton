@@ -13,7 +13,6 @@ class LeaderboardRepository(private val context: Context):IRepository<Difficulty
 
     private val gson = Gson()
 
-    //Reading the leader board
     override fun read(key: Difficulty): Leaderboard {
         val json = sharedPreferences.getString(getKeyForDifficulty(key), null)
             ?: return Leaderboard(mutableListOf(), key)
@@ -27,7 +26,6 @@ class LeaderboardRepository(private val context: Context):IRepository<Difficulty
         }
     }
 
-    //Saving the leaderboard
     override fun save(entity: Leaderboard) {
         val json = gson.toJson(entity.scores)
         sharedPreferences.edit().putString(getKeyForDifficulty(entity.difficulty), json)

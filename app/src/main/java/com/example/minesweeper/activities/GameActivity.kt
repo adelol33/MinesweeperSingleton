@@ -264,10 +264,8 @@ class GameActivity : AppCompatActivity(), GameObserver {
 
             android.util.Log.d("GameActivity", "Score sauvegardé: $playerName, ${timePlayed.inWholeSeconds}s, $difficultyName")
 
-            // Proposer de voir le leaderboard
             showLeaderboardOption()
         } catch (e: Exception) {
-            // En cas d'erreur, log et informer l'utilisateur
             e.printStackTrace()
             android.util.Log.e("GameActivity", "Erreur lors de l'enregistrement du score", e)
             Toast.makeText(this, "Erreur lors de l'enregistrement du score", Toast.LENGTH_SHORT).show()

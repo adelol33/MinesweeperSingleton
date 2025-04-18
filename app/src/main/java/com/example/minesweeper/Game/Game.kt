@@ -17,7 +17,6 @@ class Game(private val difficulty: Difficulty) {
     private val observers = mutableListOf<GameObserver>()
 
     init {
-        // Réinitialiser l'instance au début d'une nouvelle partie
         Board.resetInstance()
         board = Board.getInstance(difficulty)
     }
@@ -59,22 +58,17 @@ class Game(private val difficulty: Difficulty) {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun playMove(x: Int, y: Int): GameResult? {
-        // Si la cellule est une bombe, on perd
         if (board.isBomb(x, y)) {
             updateTime()
-            // Révéler la bombe cliquée
             board.reveal(x, y)
-            // Révéler toutes les autres cellules
             board.revealAllCells()
             val message = board.executeBombBehavior(x, y) ?: "Vous avez perdu!"
             notifyGameLost(message)
             return GameResult(false, playingTime)
         }
 
-        // Sinon, on révèle normalement
         revealCell(x, y)
 
-        // Vérifier si le jeu est gagné
         if (board.isGameWon()) {
             updateTime()
             notifyGameWon()
@@ -87,7 +81,6 @@ class Game(private val difficulty: Difficulty) {
 
     fun flagCell(x: Int, y: Int) {
         board.flag(x, y)
-        //notifyCellFlagged(x, y)
     }
 
     private fun revealCell(x: Int, y: Int) {
@@ -95,26 +88,21 @@ class Game(private val difficulty: Difficulty) {
             return
         }
 
-        // Si la cellule est déjà révélée, ne rien faire
         if (board.isRevealed(x, y)) {
             return
         }
 
         board.reveal(x, y)
-        //notifyCellRevealed(x, y)
 
-        // Obtenir le nombre de bombes autour
         val numberOfBombs = board.surroundingBombs(x, y)
 
-        // Si cette cellule n'a pas de bombes autour, alors révéler récursivement les cellules adjacentes
         if (numberOfBombs == 0) {
             for (dy in -1..1) {
                 for (dx in -1..1) {
                     val newX = x + dx
                     val newY = y + dy
-                    // On évite de rappeler pour la cellule actuelle
                     if (!(dx == 0 && dy == 0)) {
-                        revealCell(newX, newY) // Appel récursif pour explorer
+                        revealCell(newX, newY)
                     }
                 }
             }

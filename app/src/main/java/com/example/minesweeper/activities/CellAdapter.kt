@@ -72,11 +72,8 @@ class CellAdapter(private val context: Context, private val board: Board) : Base
                     }
                 }
             }
-
-
         }
 
-        // Assurez-vous que chaque cellule est carrée
         val dimension = parent?.width?.div(GameConfig.NUMBER_OF_COLUMNS) ?: 40
         view.layoutParams.height = dimension
         view.layoutParams.width = dimension

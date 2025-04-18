@@ -14,7 +14,9 @@ import com.example.minesweeper.interfaces.GameObserver
 import com.example.minesweeper.model.Difficulty
 import com.example.minesweeper.model.GameResult
 import android.content.Intent
+import android.os.Build
 import android.widget.EditText
+import androidx.annotation.RequiresApi
 import com.example.minesweeper.model.Leaderboard
 import androidx.appcompat.app.AlertDialog
 import com.example.minesweeper.model.IRepository
@@ -33,6 +35,7 @@ class GameActivity : AppCompatActivity(), GameObserver {
     private var isGamePaused = false
     private val timerHandler = Handler(Looper.getMainLooper())
     private val timerRunnable = object : Runnable {
+        @RequiresApi(Build.VERSION_CODES.O)
         override fun run() {
             if (!isGameOver && !isGamePaused) {
                 game.updateTime()
@@ -42,6 +45,7 @@ class GameActivity : AppCompatActivity(), GameObserver {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
@@ -94,6 +98,7 @@ class GameActivity : AppCompatActivity(), GameObserver {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun setupGridClickListener() {
         gridView.setOnItemClickListener { _, _, position, _ ->
             if (isGameOver || isGamePaused) return@setOnItemClickListener
@@ -168,6 +173,8 @@ class GameActivity : AppCompatActivity(), GameObserver {
         builder.setTitle(if (isVictory) "Victoire!" else "Défaite!")
             .setMessage(message)
             .setPositiveButton("Rejouer") { _, _ ->
+                // Réinitialiser le singleton Board
+                com.example.minesweeper.game.Board.resetInstance()
                 finish()
                 startActivity(intent)
             }
@@ -192,14 +199,6 @@ class GameActivity : AppCompatActivity(), GameObserver {
         timerHandler.removeCallbacks(timerRunnable)
     }
 
-//    // GameObserver implementations
-//    override fun onCellRevealed(x: Int, y: Int) {
-//        // Notification is handled by adapter refresh
-//    }
-//
-//    override fun onCellFlagged(x: Int, y: Int) {
-//        // Notification is handled by adapter refresh
-//    }
 
     override fun onGameWon() {
         Toast.makeText(this, "✅ Vous avez gagné!", Toast.LENGTH_SHORT).show()

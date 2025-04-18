@@ -1,5 +1,7 @@
 package com.example.minesweeper.game
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.example.minesweeper.interfaces.GameObserver
 import com.example.minesweeper.model.Difficulty
 import com.example.minesweeper.model.GameConfig
@@ -11,20 +13,25 @@ import java.time.Instant
 class Game(private val difficulty: Difficulty) {
     private var playingTime: Duration = Duration.ZERO
     private var lastStartTime: Long? = null
-    private var board = Board(difficulty)
+    private var board: Board
     private val observers = mutableListOf<GameObserver>()
+
+    init {
+        // Réinitialiser l'instance au début d'une nouvelle partie
+        Board.resetInstance()
+        board = Board.getInstance(difficulty)
+    }
 
     fun addObserver(observer: GameObserver) {
         observers.add(observer)
     }
 
-//    private fun notifyCellRevealed(x: Int, y: Int) {
-//        observers.forEach { it.onCellRevealed(x, y) }
-//    }
-//
-//    private fun notifyCellFlagged(x: Int, y: Int) {
-//        observers.forEach { it.onCellFlagged(x, y) }
-//    }
+    fun resetGame() {
+        Board.resetInstance()  // Réinitialiser l'instance Board
+        board = Board.getInstance(difficulty)  // Obtenir une nouvelle instance
+        playingTime = Duration.ZERO
+        lastStartTime = null
+    }
 
     private fun notifyGameWon() {
         observers.forEach { it.onGameWon() }
@@ -34,10 +41,12 @@ class Game(private val difficulty: Difficulty) {
         observers.forEach { it.onGameLost(message) }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun startTimer() {
         lastStartTime = Instant.now().toEpochMilli()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun updateTime() {
         lastStartTime?.let {
             val timeElapsed = Instant.now().toEpochMilli() - it
@@ -54,6 +63,7 @@ class Game(private val difficulty: Difficulty) {
         return playingTime
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun playMove(x: Int, y: Int): GameResult? {
         // Si la cellule est une bombe, on perd
         if (board.isBomb(x, y)) {

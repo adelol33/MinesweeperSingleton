@@ -3,7 +3,7 @@ package com.example.minesweeper.game
 import com.example.minesweeper.model.*
 import kotlin.random.Random
 
-class Board(private val difficulty: Difficulty) {
+class Board private constructor(private val difficulty: Difficulty) {
     private val cells = initCells()
 
     private fun initCells(): List<List<Cell>> {
@@ -115,7 +115,23 @@ class Board(private val difficulty: Difficulty) {
             for (x in 0 until GameConfig.NUMBER_OF_COLUMNS) {
                 val cell = getCell(x, y)
                 cell.reveal()
+            }
+        }
+    }
 
+    companion object {
+        @Volatile
+        private var instance: Board? = null
+
+        fun getInstance(difficulty: Difficulty): Board {
+            return instance ?: synchronized(this) {
+                instance ?: Board(difficulty).also { instance = it }
+            }
+        }
+
+        fun resetInstance() {
+            synchronized(this) {
+                instance = null
             }
         }
     }

@@ -34,22 +34,18 @@ class ScoreAdapter(
 
         val score = getItem(position)
 
-        // Trouver les vues
         val rankTextView = view.findViewById<TextView>(R.id.textRank)
         val nameTextView = view.findViewById<TextView>(R.id.textPlayerName)
         val timeTextView = view.findViewById<TextView>(R.id.textTime)
         val dateTextView = view.findViewById<TextView>(R.id.textDate)
 
-        // Remplir avec les données
         rankTextView.text = "${position + 1}."
         nameTextView.text = score.playerName
         timeTextView.text = "${score.timePlayed.inWholeSeconds}s"
 
-        // Formater la date
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         dateTextView.text = dateFormat.format(Date(score.timestamp))
 
-        // Appliquer un style spécial pour les 3 premiers
         when (position) {
             0 -> view.setBackgroundResource(R.drawable.leaderboard_gold_bg)
             1 -> view.setBackgroundResource(R.drawable.leaderboard_silver_bg)

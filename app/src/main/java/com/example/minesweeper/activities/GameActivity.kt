@@ -50,29 +50,23 @@ class GameActivity : AppCompatActivity(), GameObserver {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
 
-        // Get difficulty from intent
         val difficultyName = intent.getStringExtra("DIFFICULTY") ?: Difficulty.EASY.name
         val difficulty = Difficulty.valueOf(difficultyName)
 
-        // Initialize game
         game = Game(difficulty)
         game.addObserver(this)
 
-        // Initialize views
         gridView = findViewById(R.id.minesweeperGrid)
         timerTextView = findViewById(R.id.timerTextView)
         flagToggle = findViewById(R.id.flagToggle)
         pausePlayToggle = findViewById(R.id.pausePlayToggle)
 
-        // Setup cell adapter
         cellAdapter = CellAdapter(this, game.getBoard())
         gridView.adapter = cellAdapter
 
-        // Setup click listeners
         setupGridClickListener()
         setupPausePlayButton()
 
-        // Start game timer
         game.startTimer()
         timerHandler.post(timerRunnable)
     }
@@ -81,16 +75,12 @@ class GameActivity : AppCompatActivity(), GameObserver {
         pausePlayToggle.setOnCheckedChangeListener { _, isChecked ->
             isGamePaused = isChecked
             if (isGamePaused) {
-                // Jeu en pause
                 timerHandler.removeCallbacks(timerRunnable)
-                // Désactiver le clic sur la grille pendant la pause
                 gridView.isEnabled = false
                 Toast.makeText(this, "Jeu en pause", Toast.LENGTH_SHORT).show()
             } else {
-                // Reprendre le jeu
                 if (!isGameOver) {
                     timerHandler.post(timerRunnable)
-                    // Réactiver le clic sur la grille
                     gridView.isEnabled = true
                     Toast.makeText(this, "Jeu repris", Toast.LENGTH_SHORT).show()
                 }
@@ -129,7 +119,6 @@ class GameActivity : AppCompatActivity(), GameObserver {
             "Vous avez perdu. Temps joué: ${result.timePlayed.inWholeSeconds} secondes."
         }
 
-        // Montrer la solution et le résultat après un court délai
         Handler(Looper.getMainLooper()).postDelayed({
             if (result.isVictory) {
                 showVictoryDialog(result.timePlayed)
@@ -173,15 +162,13 @@ class GameActivity : AppCompatActivity(), GameObserver {
         builder.setTitle(if (isVictory) "Victoire!" else "Défaite!")
             .setMessage(message)
             .setPositiveButton("Rejouer") { _, _ ->
-                // Réinitialiser le singleton Board
                 com.example.minesweeper.game.Board.resetInstance()
                 finish()
                 startActivity(intent)
             }
             .setNegativeButton("Menu principal") { _, _ ->
-                // Créer un intent pour MainActivity et effacer la pile d'activités
-                val intent = android.content.Intent(this, MainActivity::class.java)
-                intent.flags = android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP or android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+                val intent = Intent(this, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
                 finish()
             }
@@ -207,21 +194,19 @@ class GameActivity : AppCompatActivity(), GameObserver {
     override fun onGameLost(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         isGameOver = true
-        cellAdapter.notifyDataSetChanged() // Cette ligne est importante!
+        cellAdapter.notifyDataSetChanged()
     }
 
     private fun handleGameOver(result: GameResult) {
         if (result.isVictory) {
             showVictoryDialog(result.timePlayed)
         } else {
-            // Gestion de la défaite (code existant)
             Toast.makeText(this, "Vous avez perdu !", Toast.LENGTH_SHORT).show()
             finish()
         }
     }
     override fun onPause() {
         super.onPause()
-        // Si le jeu n'est pas encore en pause et qu'il n'est pas terminé, le mettre en pause
         if (!isGamePaused && !isGameOver) {
             pausePlayToggle.isChecked = true
             isGamePaused = true
@@ -231,7 +216,6 @@ class GameActivity : AppCompatActivity(), GameObserver {
 
     override fun onResume() {
         super.onResume()
-        // Le jeu ne reprend pas automatiquement, l'utilisateur doit appuyer sur le bouton play
     }
 
     private fun showVictoryDialog(timePlayed: Duration) {
@@ -239,7 +223,6 @@ class GameActivity : AppCompatActivity(), GameObserver {
         builder.setTitle("Félicitations !")
         builder.setMessage("Vous avez gagné en ${timePlayed.inWholeSeconds} secondes !")
 
-        // Créer un EditText pour saisir le nom
         val input = EditText(this)
         builder.setView(input)
 
@@ -248,9 +231,7 @@ class GameActivity : AppCompatActivity(), GameObserver {
             if (playerName.isNotBlank()) {
                 saveScore(playerName, timePlayed)
             } else {
-                // Informer l'utilisateur que le nom est requis
                 Toast.makeText(this, "Veuillez entrer un nom", Toast.LENGTH_SHORT).show()
-                // Retour au menu principal même si pas d'enregistrement
                 navigateToMainMenu()
             }
         }
@@ -271,11 +252,9 @@ class GameActivity : AppCompatActivity(), GameObserver {
 
     private fun saveScore(playerName: String, timePlayed: Duration) {
         try {
-            // Récupérer la difficulté correctement
             val difficultyName = intent.getStringExtra("DIFFICULTY") ?: Difficulty.EASY.name
             val difficulty = Difficulty.valueOf(difficultyName)
 
-            // Ajouter le score au leaderboard
             val leaderboardRepository: IRepository<Difficulty, Leaderboard> = LeaderboardRepository(this)
 
             val leaderBoard = leaderboardRepository.read(difficulty)
@@ -283,7 +262,6 @@ class GameActivity : AppCompatActivity(), GameObserver {
 
             leaderboardRepository.save(leaderBoard)
 
-            // Log pour débogage
             android.util.Log.d("GameActivity", "Score sauvegardé: $playerName, ${timePlayed.inWholeSeconds}s, $difficultyName")
 
             // Proposer de voir le leaderboard

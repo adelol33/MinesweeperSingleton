@@ -26,12 +26,6 @@ class Game(private val difficulty: Difficulty) {
         observers.add(observer)
     }
 
-    fun resetGame() {
-        Board.resetInstance()  // Réinitialiser l'instance Board
-        board = Board.getInstance(difficulty)  // Obtenir une nouvelle instance
-        playingTime = Duration.ZERO
-        lastStartTime = null
-    }
 
     private fun notifyGameWon() {
         observers.forEach { it.onGameWon() }

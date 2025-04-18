@@ -24,14 +24,3 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
-// choses à faire et demander :
-// code :
-//    1. ajouter les boutons retour et menu
-//    2. permettre de supprimer les scores dans leaderboard (ou en mettre que 10)
-//    3. pimper l'app ? (boutons difficulté, écran d'acceuil)
-//    4. ajouter commentaires (bcp bcp bcp)
-// autre :
-//    1. identifier les différents concepts OO dans notre code et expliquer leur utilité
-//    2. expliquer ça dans le rapport (lier les concepts OO à nos implémentations ?)
-//    3. essayer l'appli sur l'ordi de qqun d'autre pls
-//    4. pas oublier d'enlever ces commentaires ci !

@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import android.widget.ImageView
 import android.widget.TextView
 import com.example.minesweeper.R
 import com.example.minesweeper.game.Board
@@ -35,7 +34,6 @@ class CellAdapter(private val context: Context, private val board: Board) : Base
         val x = position % GameConfig.NUMBER_OF_COLUMNS
         val y = position / GameConfig.NUMBER_OF_COLUMNS
 
-        // Récupérer la cellule du tableau
         val cell = board.getCell(x, y)
         val cellState = board.getCellState(x, y)
 
@@ -50,22 +48,16 @@ class CellAdapter(private val context: Context, private val board: Board) : Base
                 cellText.visibility = View.VISIBLE
                 view.setBackgroundResource(R.drawable.cell_background)
             }
-            // Dans la section CellState.Revealed de CellAdapter.kt
             is CellState.Revealed -> {
-                // Vérifier si c'est une bombe
                 if (cell.isBomb()) {
-                    // Afficher l'image appropriée selon le type de bombe
-                    cellText.visibility = View.INVISIBLE // Cacher le texte
-
-                    // Déterminer quelle image afficher
+                    cellText.visibility = View.INVISIBLE
                     val bombSymbol = cell.getBombSymbol()
-                    if (bombSymbol == "💣") { // ClassicBomb
+                    if (bombSymbol == "💣") {
                         view.setBackgroundResource(R.drawable.bomb)
-                    } else if (bombSymbol == "👾") { // ExplosionBomb (alien)
+                    } else if (bombSymbol == "👾") {
                         view.setBackgroundResource(R.drawable.alien)
                     }
                 } else {
-                    // C'est un nombre ou une case vide
                     cellText.visibility = View.VISIBLE
                     when (cellState.bombCount) {
                         0 -> {

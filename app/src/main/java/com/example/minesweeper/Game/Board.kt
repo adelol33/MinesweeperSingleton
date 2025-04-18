@@ -32,19 +32,6 @@ class Board private constructor(private val difficulty: Difficulty) {
         return cells
     }
 
-    fun solution(): List<List<String>> {
-        val boardSolution = mutableListOf<List<String>>()
-        for (y in 0 until GameConfig.NUMBER_OF_ROWS) {
-            val row = mutableListOf<String>()
-            for (x in 0 until GameConfig.NUMBER_OF_COLUMNS) {
-                val cell = cells[y][x]
-                row.add(cell.getBombSymbol() ?: "🔲")
-            }
-            boardSolution.add(row)
-        }
-        return boardSolution
-    }
-
     fun getCellState(x: Int, y: Int): CellState {
         val cell = cells[y][x]
         return when {

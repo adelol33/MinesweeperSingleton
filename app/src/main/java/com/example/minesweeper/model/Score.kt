@@ -9,7 +9,7 @@ data class Score(
     val timestamp: Long = System.currentTimeMillis()
 ) : Comparable<Score> {
     override fun compareTo(other: Score): Int {
-        // Comparaison par durée (temps plus court = meilleur score)
+
         return timePlayed.compareTo(other.timePlayed)
     }
 }
